@@ -33,6 +33,20 @@ function ledOff(){
 var ref = database.ref("led");
 ref.on("value", gotData);
 
+// 온도 데이터 실시간 수신 및 표시
+var tempRef = database.ref("temperature");
+tempRef.on("value", function(snapshot) {
+  var temp = snapshot.val();
+  var tempDiv = document.getElementById("temperature");
+  if (tempDiv) {
+    if (temp !== null) {
+      tempDiv.innerHTML = `<span style='font-size:1em; color:#222; font-weight:bold; letter-spacing:1px;'>현재온도 :</span> <b style='color:#2196f3; background: #e3f2fd; padding: 4px 12px; border-radius: 14px; font-size:1.1em; box-shadow:0 2px 8px #b3e5fc;'>${temp} ℃</b>`;
+    } else {
+      tempDiv.innerHTML = `<span style='font-size:1em; color:#222; font-weight:bold; letter-spacing:1px;'>현재온도 :</span> <b style='color:#2196f3; background: #e3f2fd; padding: 4px 12px; border-radius: 14px; font-size:1.1em; box-shadow:0 2px 8px #b3e5fc;'>-- ℃</b>`;
+    }
+  }
+});
+
 function gotData(data) {
   var val = data.val();
   if (val && val.led === 0) {
